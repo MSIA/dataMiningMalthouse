@@ -71,7 +71,7 @@ search.k <- function(x, Ks, nstart = 100) {
     si2 = silhouette(fit$cluster, dist(ruspini, "euclidean"))
     si[K - offset] = summary(si2)$avg.width
   }
-  par(mfrow=c(3,1))
+  par(mfrow=c(1, 3))
   plot(Ks, F, type = "b", xlab = "Number Clusters K")
   plot(Ks, si, type="b")
   plot(Ks, sse, type="b")
