@@ -68,7 +68,7 @@ search.k <- function(x, Ks, nstart = 100) {
     sse[K - offset] = fit$tot.withinss
 
     # silhouette
-    si2 = silhouette(fit$cluster, dist(ruspini, "euclidean"))
+    si2 = silhouette(fit$cluster, dist(x, "euclidean"))
     si[K - offset] = summary(si2)$avg.width
   }
   par(mfrow=c(1, 3))
