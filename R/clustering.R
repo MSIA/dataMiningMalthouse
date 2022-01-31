@@ -59,20 +59,22 @@ plot.kmeans = function(fit, boxplot=F)
 #' @param Ks a vector of candidate K values to perform K-Means Clustering
 #' @param nstart number of times to repeat with different random seeds for each k
 #' @export
-search.k <- function(x, Ks, nstart = 100) {
-  F <- double(length(Ks))
-  offset <- Ks[1] - 1
-  for (K in Ks) {
-    fit <- kmeans(x, K, nstart = nstart)
-    F[K - offset] <- summary(fit)$F
-    sse[K - offset] = fit$tot.withinss
-
-    # silhouette
-    si2 = silhouette(fit$cluster, dist(x, "euclidean"))
-    si[K - offset] = summary(si2)$avg.width
-  }
-  par(mfrow=c(1, 3))
-  plot(Ks, F, type = "b", xlab = "Number Clusters K")
-  plot(Ks, si, type="b")
-  plot(Ks, sse, type="b")
+search.k <- function (x, Ks, nstart = 100)
+{
+    F <- double(length(Ks))
+    sse <- double(length(Ks))
+    si <- double(length(Ks))
+    offset <- Ks[1] - 1
+    for (K in Ks) {
+        fit <- kmeans(x, K, nstart = nstart)
+        F[K - offset] <- (fit$betweenss/(K-1)) / (fit$tot.withinss/(nrow(x)-K))
+        sse[K - offset] <- fit$tot.withinss
+        si2 <- silhouette(fit$cluster, dist(x, "euclidean"))
+        si[K - offset] <- summary(si2)$avg.width
+    }
+    par(mfrow = c(1, 3))
+    plot(Ks, F, type = "b", xlab = "Number Clusters K")
+    plot(Ks, si, type = "b", xlab = "Number Clusters K")
+    plot(Ks, sse, type = "b", xlab = "Number Clusters K")
 }
+
